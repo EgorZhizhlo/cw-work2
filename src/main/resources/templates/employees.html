@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Сотрудники — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        .emp-card           {height: 320px;}
+        .emp-card img       {object-fit: cover; height: 300px;}
+        .emp-card .card-body{display:flex; flex-direction:column; justify-content:center;}
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2 class="mb-4 text-center">Наши сотрудники</h2>
+
+    <!-- если список пуст -->
+    <div th:if="${#lists.isEmpty(employees)}" class="alert alert-info text-center">
+        Пока нет ни одного зарегистрированного сотрудника.
+    </div>
+
+    <!-- row-cols автоматически делает 1-2-4 карточки -->
+    <!-- …шапка опущена для краткости… -->
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4"
+         th:unless="${#lists.isEmpty(employees)}">
+
+        <div class="col" th:each="emp : ${employees}">
+            <div class="card emp-card shadow-sm h-100">
+
+                <!-- если фото есть – /avatar/{id}, иначе статика -->
+                <img th:src="@{/avatar/{uid}(uid=${emp.user.id})}" class="card-img-top" alt="Фото"/>
+
+
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-1"
+                        th:text="${emp.user.surname + ' ' + emp.user.name}">ФИО</h6>
+                    <p class="mb-0 text-muted"
+                       th:text="${emp.user.patronymic}">Отчество</p>
+                    <p class="mt-2">Опыт:
+                        <strong th:text="${emp.workExperience}">0</strong> лет
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

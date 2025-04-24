@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Профиль — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2 class="mb-4">Личный кабинет</h2>
+
+    <!-- ====== 1. Сотрудник ================================================= -->
+
+    <p th:text="${isAdmin}"></p>
+    <div th:if="${isEmployee}">
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0 align-items-center">
+                <!-- аватар -->
+                <div class="col-md-3 text-center p-3">
+                    <img th:if="${user.photo != null}"
+                         th:src="@{/avatar/{id}(id=${userId})}"
+                         class="rounded-circle"
+                         style="width:150px;height:150px;object-fit:cover;"
+                         alt="Ваше фото"/>
+                    <img th:unless="${user.photo != null}"
+                         src="/images/default-avatar.png"
+                         class="rounded-circle"
+                         style="width:150px;height:150px;object-fit:cover;"
+                         alt="Нет фото"/>
+                </div>
+
+                <!-- основные данные -->
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h4 th:text="${employee.user.surname + ' ' + employee.user.name}">ФИО</h4>
+                        <p class="text-muted mb-1" th:text="${employee.user.patronymic}">Отчество</p>
+
+                        <p class="mb-1">
+                            Опыт работы:
+                            <strong th:text="${employee.workExperience}">0</strong> лет
+                        </p>
+                        <p th:text="${employee.additionalInfo}">Дополнительная информация</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- график / обслуживаемые машины -->
+        <h4>Список обслуживаемых машин</h4>
+
+        <div th:if="${#lists.isEmpty(schedules)}" class="alert alert-info">
+            На текущий момент нет назначенных работ.
+        </div>
+
+        <table class="table table-striped shadow-sm" th:unless="${#lists.isEmpty(schedules)}">
+            <thead class="table-dark">
+            <tr>
+                <th>Модель</th><th>Цвет</th><th>Начало</th><th>Конец</th><th>Владелец</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${schedules}">
+                <td th:text="${s.car.name}"></td>
+                <td th:text="${s.car.color}"></td>
+                <td th:text="${#dates.format(s.startTime,'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${#dates.format(s.endTime,'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${s.car.owner.surname + ' ' + s.car.owner.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ====== 2. Клиент ==================================================== -->
+    <div th:if="${isAuthenticated and !isEmployee}">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5>ФИО:
+                    <span th:text="${user.surname + ' ' + user.name}"></span>
+                </h5>
+                <p>Отчество:
+                    <span th:text="${user.patronymic}"></span>
+                </p>
+                <p>Email:
+                    <span th:text="${user.email}"></span>
+                </p>
+                <p>Телефон:
+                    <span th:text="${user.phoneNumber}"></span>
+                </p>
+            </div>
+        </div>
+        <h4>Мои машины</h4>
+        <a class="btn btn-primary" th:href="@{/my-cars}">Перейти</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
