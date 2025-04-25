@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class CarController {
     private final UserService userService;
 
     @GetMapping("/my-cars")
+    @Transactional(readOnly = true)
     public String myCars(@AuthenticationPrincipal UserDetails ud, Model m) {
         // достаём email и загружаем пользователя
         String email = ud.getUsername();

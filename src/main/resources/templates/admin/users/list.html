@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Админ — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2>Пользователи</h2>
+    <a th:href="@{/admin/users/new}" class="btn btn-success mb-3">Новый</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{|/admin/users?sort=id&dir=${currentSort=='id'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    ID <span th:text="${currentSort=='id'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>Фото</th>
+            <th>
+                <a th:href="@{|/admin/users?sort=surname&dir=${currentSort=='surname'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Фамилия <span th:text="${currentSort=='surname'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/users?sort=name&dir=${currentSort=='name'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Имя <span th:text="${currentSort=='name'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/users?sort=patronymic&dir=${currentSort=='patronymic'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Отчество <span th:text="${currentSort=='patronymic'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/users?sort=email&dir=${currentSort=='email'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Email <span th:text="${currentSort=='email'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>Телефон</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}"></td>
+            <td>
+                <img th:if="${u.photo != null}"
+                     th:src="@{/admin/users/photo/{id}(id=${u.id})}"
+                     width="50" height="50" class="rounded-circle"/>
+            </td>
+            <td th:text="${u.surname}"></td>
+            <td th:text="${u.name}"></td>
+            <td th:text="${u.patronymic}"></td>
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.phoneNumber}"></td>
+            <td>
+                <a th:href="@{|/admin/users/edit/${u.id}|}" class="btn btn-sm btn-primary">Ред.</a>
+                <a th:href="@{|/admin/users/delete/${u.id}|}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Удалить?');">Удал.</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

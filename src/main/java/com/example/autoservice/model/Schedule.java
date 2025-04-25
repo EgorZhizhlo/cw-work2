@@ -22,7 +22,7 @@ public class Schedule {
     @Column(length = 255)
     private String breakdown;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 255)
     private String descriptionOfBreakdown;
 
 

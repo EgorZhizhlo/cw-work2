@@ -8,7 +8,5 @@ public class CarDTO {
     private String name;
     private Integer age;
     private String color;
-    private String breakdown;
-    private String descriptionOfBreakdown;
     private UserDTO owner;
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Админ — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2 th:text="${schedule.id == null ? 'Новое расписание' : 'Редактирование'}"></h2>
+    <form th:action="@{/admin/schedules/save}" th:object="${schedule}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="mb-3">
+            <label>Сотрудник</label>
+            <select class="form-select" name="employeeId">
+                <option th:each="e: ${employees}" th:value="${e.user.id}" th:text="${e.user.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Авто</label>
+            <select class="form-select" name="carId">
+                <option th:each="c: ${cars}" th:value="${c.id}" th:text="${c.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Проблема</label>
+            <input class="form-control" th:field="*{breakdown}"/>
+        </div>
+        <div class="mb-3">
+            <label>Описание</label>
+            <textarea class="form-control" th:field="*{descriptionOfBreakdown}"></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Начало</label>
+            <input type="datetime-local" class="form-control" th:field="*{startTime}"/>
+        </div>
+        <div class="mb-3">
+            <label>Конец</label>
+            <input type="datetime-local" class="form-control" th:field="*{endTime}"/>
+        </div>
+        <button class="btn btn-primary">Сохранить</button>
+        <a th:href="@{/admin/schedules}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

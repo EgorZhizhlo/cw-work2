@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Админ — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2 th:text="${car.id == null ? 'Новая машина' : 'Редактирование машины'}"></h2>
+
+    <form th:action="@{/admin/cars/save}" th:object="${car}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label class="form-label">Имя</label>
+            <input type="text" class="form-control" th:field="*{name}" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Возраст</label>
+            <input type="number" class="form-control" th:field="*{age}" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Цвет</label>
+            <input type="text" class="form-control" th:field="*{color}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Владелец</label>
+            <select class="form-select" name="ownerId" required>
+                <option value="" disabled th:if="${car.owner == null}" selected>-- выберите пользователя --</option>
+                <option th:each="u : ${users}"
+                        th:value="${u.id}"
+                        th:text="${u.surname + ' ' + u.name + ' (' + u.email + ')'}"
+                        th:selected="${car.owner != null} ? ${u.id} == ${car.owner.id} : false">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a th:href="@{/admin/cars}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Админ — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2>Расписания</h2>
+    <a th:href="@{/admin/schedules/new}" class="btn btn-success mb-3">Новое</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{|/admin/schedules?sort=id&dir=${currentSort=='id'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    ID <span th:text="${currentSort=='id'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/schedules?sort=startTime&dir=${currentSort=='startTime'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Начало <span th:text="${currentSort=='startTime'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/schedules?sort=endTime&dir=${currentSort=='endTime'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Конец <span th:text="${currentSort=='endTime'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${schedules}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${#dates.format(s.startTime,'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#dates.format(s.endTime,'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <a th:href="@{|/admin/schedules/edit/${s.id}|}" class="btn btn-sm btn-primary">Ред.</a>
+                <a th:href="@{|/admin/schedules/delete/${s.id}|}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?');">Удал.</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

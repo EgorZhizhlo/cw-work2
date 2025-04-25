@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Админ — AutoService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container my-5">
+    <h2>Управление машинами</h2>
+    <a th:href="@{/admin/cars/new}" class="btn btn-success mb-3">Новая машина</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{|/admin/cars?sort=id&dir=${currentSort=='id'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    ID
+                    <span th:text="${currentSort=='id'? (currentDir=='asc'?'↑':'↓') : ''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/cars?sort=name&dir=${currentSort=='name'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Имя
+                    <span th:text="${currentSort=='name'? (currentDir=='asc'?'↑':'↓') : ''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/cars?sort=age&dir=${currentSort=='age'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Возраст
+                    <span th:text="${currentSort=='age'? (currentDir=='asc'?'↑':'↓') : ''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/cars?sort=color&dir=${currentSort=='color'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Цвет
+                    <span th:text="${currentSort=='color'? (currentDir=='asc'?'↑':'↓') : ''}"></span>
+                </a>
+            </th>
+            <th>Владелец</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.id}"></td>
+            <td th:text="${car.name}"></td>
+            <td th:text="${car.age}"></td>
+            <td th:text="${car.color}"></td>
+            <td th:text="${car.owner != null ? car.owner.surname + ' ' + car.owner.name : '-'}"></td>
+            <td>
+                <a th:href="@{|/admin/cars/edit/${car.id}|}" class="btn btn-sm btn-primary">Ред.</a>
+                <a th:href="@{|/admin/cars/delete/${car.id}|}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Удалить?');">Удал.</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

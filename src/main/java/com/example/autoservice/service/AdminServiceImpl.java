@@ -14,4 +14,9 @@ public class AdminServiceImpl implements AdminService {
     public boolean isAdmin(Long userId) {
         return adminBaseRepo.existsById(userId);
     }
+
+    @Override
+    public long countAdmins() {
+        return adminBaseRepo.count();
+    }
 }
