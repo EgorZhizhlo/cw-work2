@@ -12,18 +12,35 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
+    private final UserRepository    userRepository;
+    private final PasswordEncoder   passwordEncoder;
+    private final UserMapper        userMapper;
 
     @Override
     public UserDTO authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        // 1) Лёгкая проекция — без фото и без LOB
+        UserRepository.AuthUserProjection light = userRepository
+                .findLightByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден (проекция)"));
+
+        // 2) Оригинальный User для проверки пароля
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден (для пароля)"));
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Неверный пароль");
         }
-        return userMapper.toDto(user);
+
+        // 3) Собираем DTO для контроллера/токена
+        return UserDTO.builder()
+                .id(light.getId())
+                .surname(light.getSurname())
+                .name(light.getName())
+                .patronymic(light.getPatronymic())
+                .phoneNumber(light.getPhoneNumber())
+                .email(light.getEmail())
+                .build();
     }
 
     @Override

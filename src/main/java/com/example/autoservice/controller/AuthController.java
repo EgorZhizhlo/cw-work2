@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -27,22 +28,25 @@ public class AuthController {
     public String loginForm() {
         return "login";
     }
-
+    @Transactional(readOnly = true)
     @PostMapping("/login")
-    public String doLogin(@RequestParam String email,
-                          @RequestParam String password,
-                          HttpServletResponse response,
-                          Model model) {
+    public String doLogin(
+            @RequestParam String email,
+            @RequestParam String password,
+            HttpServletResponse response,
+            Model model) {
 
+        UserDTO authDto;
         try {
-            authService.authenticate(email, password);      // проверяем пароль
+            authDto = authService.authenticate(email, password);
         } catch (RuntimeException ex) {
             model.addAttribute("error", ex.getMessage());
             return "login";
         }
 
-        // кладём JWT-cookie
-        createJwtCookie(response, jwtService.generateToken(email));
+        // в JWT кладём только необходимые поля (email, id и т.п.), без фото
+        String token = jwtService.generateToken(authDto.getEmail());
+        createJwtCookie(response, token);
         return "redirect:/";
     }
 

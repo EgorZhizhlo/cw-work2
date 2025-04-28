@@ -22,6 +22,7 @@ public class User {
 
     /** Сама картинка (PNG/JPG и т.п.). Храним прямо в таблице */
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "photo")              // тип BYTEA / LONGBLOB / BLOB
     private byte[] photo;
 }
