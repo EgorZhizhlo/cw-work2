@@ -35,8 +35,8 @@
         <tbody>
         <tr th:each="s : ${schedules}">
             <td th:text="${s.id}"></td>
-            <td th:text="${#dates.format(s.startTime,'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${#dates.format(s.endTime,'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(s.startTime,'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(s.endTime,'yyyy-MM-dd HH:mm')}"></td>
             <td>
                 <a th:href="@{|/admin/schedules/edit/${s.id}|}" class="btn btn-sm btn-primary">Ред.</a>
                 <a th:href="@{|/admin/schedules/delete/${s.id}|}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?');">Удал.</a>
