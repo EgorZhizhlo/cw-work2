@@ -63,8 +63,8 @@
             <tr th:each="s : ${schedules}">
                 <td th:text="${s.car.name}"></td>
                 <td th:text="${s.car.color}"></td>
-                <td th:text="${#dates.format(s.startTime,'dd.MM.yyyy HH:mm')}"></td>
-                <td th:text="${#dates.format(s.endTime,'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(s.startTime,'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(s.endTime,'dd.MM.yyyy HH:mm')}"></td>
                 <td th:text="${s.car.owner.surname + ' ' + s.car.owner.name}"></td>
             </tr>
             </tbody>
