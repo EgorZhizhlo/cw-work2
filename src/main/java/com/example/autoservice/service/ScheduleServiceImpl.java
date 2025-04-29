@@ -5,6 +5,7 @@ import com.example.autoservice.repository.ScheduleRepository;
 import com.example.autoservice.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -12,6 +13,7 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository repo;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Schedule> getByEmployeeId(Long userId) {
         return repo.findByEmployeeUserId(userId);
