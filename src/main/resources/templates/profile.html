@@ -72,11 +72,11 @@
     </div>
 
     <!-- ====== 2. Клиент ==================================================== -->
-    <div th:if="${isAuthenticated and !isEmployee}">
+    <div th:if="${isAuthenticated and not isEmployee}">
         <div class="card mb-4 shadow-sm">
             <div class="card-body">
-                <h5>ФИО:
-                    <span th:text="${user.surname + ' ' + user.name}"></span>
+                <h5>
+                    ФИО: <span th:text="${user.surname + ' ' + user.name}"></span>
                 </h5>
                 <p>Отчество:
                     <span th:text="${user.patronymic}"></span>
