@@ -1,17 +1,18 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:14
     restart: always
     environment:
-      POSTGRES_DB: autoservice
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "autoservice_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
     expose:
       - "5432"
     ports:
       - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
   app:
     build: .
@@ -20,10 +21,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/autoservice
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/autoservice_db"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
       JWT_SECRET: z8cx418*#&$*(!)20459213012-409t4499udf801240-uidsuf91204-14udis01204014-1
       JWT_EXPIRATION_MS: 86400000
 volumes:
   pgdata:
+    driver: local
