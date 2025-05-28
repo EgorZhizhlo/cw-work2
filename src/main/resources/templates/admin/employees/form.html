@@ -9,24 +9,37 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="container my-5">
-    <h2 th:text="${employee.user == null ? 'Новый сотрудник' : 'Редактирование'}"></h2>
+    <h2 th:text="${employee.userId == null ? 'Новый сотрудник' : 'Редактирование'}"></h2>
+
+    <!-- Показываем ошибку оптимистической блокировки, если есть -->
+    <div th:if="${errorMessage}" class="alert alert-warning" th:text="${errorMessage}"></div>
+
     <form th:action="@{/admin/employees/save}" th:object="${employee}" method="post">
+        <!-- Скрытое поле версии -->
+        <input type="hidden" th:field="*{version}"/>
+
         <div class="mb-3">
-            <label>User</label>
-            <select class="form-select" name="userId">
-                <option th:each="u: ${users}" th:value="${u.id}" th:text="${u.id + ' – ' + u.name}"></option>
+            <label for="userSelect" class="form-label">Сотрудник</label>
+            <select id="userSelect" class="form-select" th:field="*{userId}">
+                <option th:each="u : ${users}"
+                        th:value="${u.id}"
+                        th:text="${u.surname + ' ' + u.name + ' ' + u.patronymic}">
+                </option>
             </select>
         </div>
+
         <div class="mb-3">
-            <label>Опыт</label>
-            <input type="number" class="form-control" th:field="*{workExperience}"/>
+            <label for="workExperience" class="form-label">Опыт (лет)</label>
+            <input id="workExperience" type="number" class="form-control" th:field="*{workExperience}" min="0"/>
         </div>
+
         <div class="mb-3">
-            <label>Доп. инфо</label>
-            <textarea class="form-control" th:field="*{additionalInfo}"></textarea>
+            <label for="additionalInfo" class="form-label">Доп. инфо</label>
+            <textarea id="additionalInfo" class="form-control" th:field="*{additionalInfo}"></textarea>
         </div>
-        <button class="btn btn-primary">Сохранить</button>
-        <a th:href="@{/admin/employees}" class="btn btn-secondary">Отмена</a>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a th:href="@{/admin/employees}" class="btn btn-secondary ms-2">Отмена</a>
     </form>
 </div>
 

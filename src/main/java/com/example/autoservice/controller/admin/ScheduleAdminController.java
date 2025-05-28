@@ -1,6 +1,7 @@
 package com.example.autoservice.controller.admin;
 
 import com.example.autoservice.model.Schedule;
+import com.example.autoservice.model.ScheduleStatus;
 import com.example.autoservice.service.AdminScheduleService;
 import com.example.autoservice.service.AdminEmployeeService;
 import com.example.autoservice.service.AdminCarService;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleAdminController {
 
     private final AdminScheduleService schedService;
-    private final AdminEmployeeService adminEmployeeService;  // список сотрудников
-    private final AdminCarService adminCarService;            // список машин
+    private final AdminEmployeeService adminEmployeeService;
+    private final AdminCarService adminCarService;
     private final AdminService adminService;
     private final UserService authUserService;
 
@@ -43,6 +44,21 @@ public class ScheduleAdminController {
         m.addAttribute("currentSort", sort);
         m.addAttribute("currentDir", dir);
         return "admin/schedules/list";
+    }
+
+    @PostMapping("/updateStatus")
+    public String updateStatus(
+            @AuthenticationPrincipal UserDetails ud,
+            @RequestParam Long id,
+            @RequestParam ScheduleStatus status,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir
+    ) {
+        if (!isAdmin(ud)) return "error/403";
+        var sched = schedService.findById(id);
+        sched.setStatus(status);
+        schedService.save(sched);
+        return "redirect:/admin/schedules?sort=" + sort + "&dir=" + dir;
     }
 
     @GetMapping("/new")

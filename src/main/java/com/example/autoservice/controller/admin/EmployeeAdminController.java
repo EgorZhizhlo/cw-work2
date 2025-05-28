@@ -3,11 +3,12 @@ package com.example.autoservice.controller.admin;
 import com.example.autoservice.model.EmployeeBase;
 import com.example.autoservice.model.User;
 import com.example.autoservice.service.AdminEmployeeService;
-import com.example.autoservice.service.AdminUserService;
 import com.example.autoservice.service.AdminService;
+import com.example.autoservice.service.AdminUserService;
 import com.example.autoservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeAdminController {
 
     private final AdminEmployeeService empService;
-    private final AdminUserService adminUserService;      // список пользователей
+    private final AdminUserService adminUserService;
     private final AdminService adminService;
     private final UserService authUserService;
 
@@ -67,11 +68,24 @@ public class EmployeeAdminController {
     @PostMapping("/save")
     public String save(
             @AuthenticationPrincipal UserDetails ud,
-            @ModelAttribute EmployeeBase employee
+            @ModelAttribute EmployeeBase employee,
+            @RequestParam Long userId,
+            Model m
     ) {
         if (!isAdmin(ud)) return "error/403";
-        empService.save(employee);
-        return "redirect:/admin/employees";
+        // Set associated user explicitly
+        User user = adminUserService.findById(userId);
+        employee.setUser(user);
+        try {
+            empService.save(employee);
+            return "redirect:/admin/employees";
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            m.addAttribute("errorMessage",
+                    "Сотрудник уже был изменён другим пользователем. Пожалуйста, обновите страницу и попробуйте снова.");
+            m.addAttribute("employee", empService.findById(employee.getUser().getId()));
+            m.addAttribute("users", adminUserService.findAll());
+            return "admin/employees/form";
+        }
     }
 
     @GetMapping("/delete/{userId}")

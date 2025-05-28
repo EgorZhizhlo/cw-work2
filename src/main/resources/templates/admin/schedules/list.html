@@ -29,6 +29,11 @@
                     Конец <span th:text="${currentSort=='endTime'? (currentDir=='asc'?'↑':'↓'):''}"></span>
                 </a>
             </th>
+            <th>
+                <a th:href="@{|/admin/schedules?sort=status&dir=${currentSort=='status'? (currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Статус <span th:text="${currentSort=='status'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -38,8 +43,25 @@
             <td th:text="${#temporals.format(s.startTime,'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${#temporals.format(s.endTime,'yyyy-MM-dd HH:mm')}"></td>
             <td>
+                <form th:action="@{/admin/schedules/updateStatus}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${s.id}"/>
+                    <input type="hidden" name="sort" th:value="${currentSort}"/>
+                    <input type="hidden" name="dir" th:value="${currentDir}"/>
+                    <select name="status"
+                            class="form-select form-select-sm"
+                            onchange="this.form.submit()">
+                        <option th:each="st : ${T(com.example.autoservice.model.ScheduleStatus).values()}"
+                                th:value="${st}"
+                                th:text="${st.displayName}"
+                                th:selected="${st == s.status}">
+                        </option>
+                    </select>
+                </form>
+            </td>
+            <td>
                 <a th:href="@{|/admin/schedules/edit/${s.id}|}" class="btn btn-sm btn-primary">Ред.</a>
-                <a th:href="@{|/admin/schedules/delete/${s.id}|}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?');">Удал.</a>
+                <a th:href="@{|/admin/schedules/delete/${s.id}|}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Удалить?');">Удал.</a>
             </td>
         </tr>
         </tbody>

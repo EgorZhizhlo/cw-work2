@@ -20,4 +20,7 @@ public class EmployeeBase {
 
     @Column(columnDefinition = "TEXT")
     private String additionalInfo;
+
+    @Version
+    private Long version;
 }

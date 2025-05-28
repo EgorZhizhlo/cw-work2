@@ -28,4 +28,8 @@ public class Schedule {
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private ScheduleStatus status;
 }
