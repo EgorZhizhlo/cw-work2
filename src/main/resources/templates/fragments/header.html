@@ -26,9 +26,7 @@
                         <a class="btn btn-primary me-2" th:href="@{/profile}">Личный кабинет</a>
                     </li>
                     <li class="nav-item" th:if="${isAuthenticated}">
-                        <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button class="btn btn-danger">Выйти</button>
-                        </form>
+                        <a class="btn btn-danger" th:href="@{/logout}">Выйти</a>
                     </li>
                 </ul>
             </div>

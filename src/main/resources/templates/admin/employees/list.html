@@ -15,13 +15,28 @@
         <thead>
         <tr>
             <th>
-                <a th:href="@{|/admin/employees?sort=user.id&dir=${currentSort=='user.id'? (currentDir=='asc'?'desc':'asc'):'asc'}|}">
-                    User ID <span th:text="${currentSort=='user.id'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                <a th:href="@{|/admin/employees?sort=user.id&dir=${currentSort=='user.id'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    User ID <span th:text="${currentSort=='user.id'?(currentDir=='asc'?'↑':'↓'):''}"></span>
                 </a>
             </th>
             <th>
-                <a th:href="@{|/admin/employees?sort=workExperience&dir=${currentSort=='workExperience'? (currentDir=='asc'?'desc':'asc'):'asc'}|}">
-                    Опыт <span th:text="${currentSort=='workExperience'? (currentDir=='asc'?'↑':'↓'):''}"></span>
+                <a th:href="@{|/admin/employees?sort=user.surname&dir=${currentSort=='user.surname'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Фамилия <span th:text="${currentSort=='user.surname'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/employees?sort=user.name&dir=${currentSort=='user.name'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Имя <span th:text="${currentSort=='user.name'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/employees?sort=user.patronymic&dir=${currentSort=='user.patronymic'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Отчество <span th:text="${currentSort=='user.patronymic'?(currentDir=='asc'?'↑':'↓'):''}"></span>
+                </a>
+            </th>
+            <th>
+                <a th:href="@{|/admin/employees?sort=workExperience&dir=${currentSort=='workExperience'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
+                    Опыт <span th:text="${currentSort=='workExperience'?(currentDir=='asc'?'↑':'↓'):''}"></span>
                 </a>
             </th>
             <th>Действия</th>
@@ -29,11 +44,15 @@
         </thead>
         <tbody>
         <tr th:each="e : ${employees}">
-            <td th:text="${e.user.id}"></td>
-            <td th:text="${e.workExperience}"></td>
+            <td th:text="${e.user.id}">1</td>
+            <td th:text="${e.user.surname}">Иванов</td>
+            <td th:text="${e.user.name}">Иван</td>
+            <td th:text="${e.user.patronymic}">Иванович</td>
+            <td th:text="${e.workExperience}">5</td>
             <td>
                 <a th:href="@{|/admin/employees/edit/${e.user.id}|}" class="btn btn-sm btn-primary">Ред.</a>
-                <a th:href="@{|/admin/employees/delete/${e.user.id}|}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?');">Удал.</a>
+                <a th:href="@{|/admin/employees/delete/${e.user.id}|}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Удалить сотрудника?');">Удал.</a>
             </td>
         </tr>
         </tbody>

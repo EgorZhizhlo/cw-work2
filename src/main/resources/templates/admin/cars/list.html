@@ -28,7 +28,7 @@
             </th>
             <th>
                 <a th:href="@{|/admin/cars?sort=age&dir=${currentSort=='age'?(currentDir=='asc'?'desc':'asc'):'asc'}|}">
-                    Возраст
+                    Год выпуска
                     <span th:text="${currentSort=='age'? (currentDir=='asc'?'↑':'↓') : ''}"></span>
                 </a>
             </th>
